@@ -1,0 +1,1224 @@
+@use "sass:map"; // mapモジュールをインポート
+
+$font-family: "Noto Serif JP";
+$main-color: #3EA1D1;
+$required-color: #E7728E;
+$text-color: #333;
+$text-color-white: #FFF;
+
+$width-inner: 1140px;
+
+// ブレークポイントの定義をマップとして設定
+$breakpoints: (
+    sm: "screen and (min-width: 320px)", // 小型スマートフォン
+    md: "screen and (min-width: 480px)", // 一般的なスマートフォン
+    lg: "screen and (min-width: 768px)", // タブレット縦置き
+    xl: "screen and (min-width: 1024px)", // タブレット横置き、ノートパソコン
+    xxl: "screen and (min-width: 1200px)" // デスクトップ以上
+);
+
+// メディアクエリを生成するためのミックスインを定義
+@mixin mq($breakpoint: md) {
+    // 指定されたブレークポイントに基づいてメディアクエリを作成
+    @media #{map.get($breakpoints, $breakpoint)} {
+        // ミックスインに渡されたコンテンツを挿入
+        @content;
+    }
+}
+
+// ----- common -----
+
+// body全体
+body {
+    font-family: $font-family;// フォント
+    font-style: normal;// 通常体
+    background: $text-color-white;
+    color: $text-color;// 文字色
+    font-size: 16px;// 文字サイズ
+    line-height: 170%;// 文字高さ
+    font-weight: 300;// 文字太さ
+}
+
+// 各sectionのタイトル文字
+.heading {
+    font-family: $font-family;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 100%; /* 30px */
+
+    text-align: center;
+
+    @include mq(lg) {
+        font-size: 40px;
+    }
+
+    h2 {
+        margin-bottom: 26px;
+
+        @include mq(lg) {
+            margin-top: 24px;
+        }
+    }
+
+    svg {
+        display: block; /* SVGをブロック要素として表示（改行） */
+        margin: 0 auto; /* 必要なら中央揃え */
+    }
+}
+
+// inner 左右の余白など
+.inner {
+    padding-left: 15px;
+    padding-right: 15px;
+
+    // productsセクション
+    &.wide {
+        padding-left: 56px;
+        padding-right: 56px;
+
+        @include mq(lg) {
+            padding-left: 170px;
+            padding-right: 170px;
+        }
+    }
+
+    // newsセクション
+    &.medium {
+        padding-left: 15px;
+        padding-right: 15px;
+
+        @include mq(lg) {
+            padding-left: 120px;
+            padding-right: 120px;
+        }
+    }
+
+
+
+    @include mq(lg) {
+        // 要素の最大幅
+        max-width: 1280px;
+        
+        padding-left: 40px;
+        padding-right: 40px;
+
+        // 幅が1280px以上の時は左右を均等に分ける
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+// ボタン
+.button {
+    color: $main-color;
+    font-family: $font-family;
+    font-size: 14px;
+    letter-spacing: 0.02px;
+
+    border: 1px solid $main-color;
+    background: $text-color-white;
+
+    padding: 14px 57.5px;
+    text-align: center;
+
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+        color: $text-color-white;
+        background-color: $main-color;
+    }
+}
+
+// PC時に非表示
+.hidden-pc {
+    @include mq(lg) {
+        display: none;
+    }
+}
+
+// SP時に非表示
+.hidden-sp {
+        display: none;
+
+        @include mq(lg) {
+            display: block;
+        }
+}
+
+// ----- /common -----
+
+// ----- header -----
+.header {
+}
+
+// header全体の入れ物
+.header__inner {
+    display: flex;
+    justify-content: space-between;
+}
+
+// ヘッダーロゴ
+.header__logo-box {
+    margin-top: 19px;
+    margin-bottom: 19px;
+    margin-left: 15px;
+
+    @include mq(lg) {
+        margin-top: 24px;
+        margin-bottom: 24px;
+        margin-left: 40px;
+    }
+
+    a {
+        img {
+            width: 120px;
+            // 余計な隙間をなくす
+            display: block;
+        }
+    }
+}
+
+.header__logo {
+}
+
+.header__nav {
+}
+
+// ヘッダーのリスト(PC)
+.header__nav-ul {
+    display: none;
+
+    @include mq(lg) {
+        display: flex;
+        align-items: center;
+        gap: 46px;
+
+        margin-top: 22px;
+        margin-right: 40px;
+    }
+}
+
+.header__nav-li {
+}
+
+.header__link {
+}
+
+// ===== ハンバーガーアイコン =====
+.header__open {
+    margin-top: 21px;
+    margin-right: 15px;
+    
+    @include mq(lg) {
+        display: none;
+    }
+}
+
+.drawer-icon {
+    width: 30px;
+    height: 18px;
+    position: relative;
+    z-index: 51;
+
+    // ハンバーガーメニューがクリックされた時、バツボタンに変更する
+    &.is-checked {
+        .drawer-icon__bar {
+            &:nth-of-type(1) {
+                // 線の高さを中心に持ってくる
+                top: 10px;
+                transform: rotate(30deg);
+            }
+
+            &:nth-of-type(2) {
+                display: none;
+            }
+
+            &:nth-of-type(3) {
+                // 線の高さを中心に持ってくる
+                top: 10px;
+                transform: rotate(-30deg);
+            }
+        }
+    }
+}
+// ===== /ハンバーガーアイコン =====
+
+// ===== ドロワーメニュー =====
+.drawer-content{
+    display: none;
+}
+
+.drawer-content__menu{
+}
+
+.drawer-content__link{
+}
+// ===== /ドロワーメニュー =====
+// ----- /header -----
+
+// ----- first-view -----
+.first-view {
+}
+
+// first-view全体の入れ物
+.first-view__inner {
+}
+
+// 画像と文字を入れる箱
+.first-view__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;/* 初期状態では縦並び（スマホ用） */
+    justify-content: center;
+    align-items: flex-start;/* フレックスアイテムを先頭にまとめる */
+
+    @include mq(lg) {
+        flex-direction: row-reverse; /* 横並び（PC用） */
+        justify-content: flex-end; /* 画像を右に寄せる */
+        text-align: left; /* テキストを左揃え */
+    }
+}
+
+// first-viewの画像
+.first-view__img {
+    width: 100;
+
+    @include mq(lg) {
+        margin-left: auto; // 画像を右側に寄せる
+        
+        //位置を調整
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    img {
+        @include mq(lg) {
+            max-width: 990px;
+        }
+    }
+}
+
+// テキスト全体の入れ物
+.first-view__text-box {
+    margin-top: 40px;
+
+    @include mq(md) {
+        margin-top: 0;
+
+        width: 367px;
+        padding: 80px 40px;
+        background: #FFF;
+
+        //位置を調整
+        position: absolute;
+        top: 171px;
+        left: -40px;
+    }
+}
+
+.first-view__title {
+    font-size: 26px;
+    font-weight: 600;
+
+    @include mq(lg) {
+        line-height: 170%; /* 44.2px */
+    }
+}
+
+.first-view__text {
+    margin-top: 24px;
+
+    @include mq(lg) {
+        margin-top: 16px;
+    }
+}
+
+// ----- /first-view -----
+
+// ----- concept -----
+.concept {
+    margin-top: 94px;
+
+    @include mq(lg) {
+        margin-top: 820px;
+    }
+}
+
+.concept__inner {
+}
+
+.concept__heading {
+}
+
+.concept__heading-title {
+}
+
+.concept__container {
+    margin-top: 44px;
+    
+    @include mq(lg) {
+        display: flex;
+        margin-top: 64px;
+    }
+}
+
+.concept__img {
+
+    @include mq(lg) {
+        // 画面幅が小さいときに調整
+        // 600 / 1200
+        max-width: calc(600px / 1200px * 100%);
+        flex: 1;
+    }
+    
+    /* 画像のリサイズ設定 */
+    img {
+        width: 100%;// 画像の幅を親要素に合わせる
+        height: auto;// 高さを自動調整
+    }
+}
+
+.concept__text-box {
+    margin-top: 36px;
+
+    @include mq(lg) {
+        // 画面幅が小さいときに調整
+        // 600 / 1200
+        max-width: calc(600px / 1200px * 100%);
+        margin-top: 0;
+        // 画面幅が小さいときに調整
+        // 1200 / 80
+        padding-left: calc(80px / 1200px * 100%);
+        flex: 1;
+    }
+}
+
+.concept__title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 170%; /* 34px */
+
+    @include mq(lg) {
+        margin-top: 105px;
+        line-height: 170%; /* 34px */
+    }
+}
+
+.concept__text {
+    margin-top: 22px;
+
+    @include mq(lg) {
+        margin-top: 40px;
+        padding-right: 1px;
+    }
+}
+// ----- /concept -----
+
+// ----- feature -----
+.feature {
+    margin-top: 94px;
+
+    @include mq(lg) {
+        margin-top: 158px;
+    }
+}
+
+.feature__inner {
+}
+
+.feature__heading {
+}
+
+.feature__heading-title {
+}
+
+.feature__blocks {
+    margin-top: 46px;
+
+    @include mq(lg) {
+        margin-top: 62px;
+
+        display: flex;
+        gap: 90px;
+    }
+}
+
+.feature__block {
+    box-shadow: 3px 3px 15px 0px rgba(96, 96, 96, 0.16);
+
+    @include mq(lg) {
+        max-width: 340px;
+    }
+}
+
+// 2つ目以降の「feature__block」に当てる
+.feature__block:not(:first-child) {
+    margin-top: 50px;
+
+    @include mq(lg) {
+        margin-top: 0;
+    }
+}
+
+.feature__block-img {
+
+    img {
+
+    }
+}
+
+.feature__block-text {
+    padding: 26px 93px;
+
+    text-align: center;
+    font-weight: 600;
+    line-height: 170%; /* 27.2px */
+
+    @include mq(lg) {
+        // 画面幅が小さいときに調整
+        // 84px / 340px
+        padding: 26px calc(84px / 340px * 100%);
+        line-height: 160%;
+    }
+}
+// ----- /feature -----
+
+// ----- about -----
+.about {
+    background: url(../img/bg-sp.png) no-repeat top center / cover;
+    position: relative;
+    width: 100%;
+    
+    margin-top: 96px;
+    padding-top: 180px;
+    padding-bottom: 50px;
+
+    @include mq(lg) {
+        background-image: url(../img/bg-pc.png);
+
+        margin-top: 160px;
+        padding-top: 123px;
+        padding-bottom: 122px;
+    }
+
+    // 背景画像の手前に少し黒い四角を配置
+    &::after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        // 透明に近い黒
+        background: rgba(0, 0, 0, 0.12);
+        z-index: 1;
+    }
+}
+
+.about__inner {
+    width: 100%;
+}
+
+.about__text-container {
+    position: relative;
+    z-index: 2;
+}
+
+.about__title {
+    color: $text-color-white;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 170%; /* 34px */
+
+    @include mq(lg) {
+        font-size: 22px;
+        line-height: 170%; /* 37.4px */
+    }
+}
+
+.about__text-box {
+    margin-top: 24px;
+}
+
+.about__text {
+    color: $text-color-white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 170%; /* 23.8px */
+
+    @include mq(lg) {
+        font-size: 16px;
+        line-height: 170%; /* 27.2px */
+    }
+}
+
+// ----- /about -----
+
+// ----- products -----
+.products {
+    margin-top: 96px;
+
+    @include mq(lg) {
+        margin-top: 160px;
+    }
+}
+
+.products__inner {
+}
+
+.products__heading {
+}
+
+.products__heading-title {
+}
+
+.products__blocks {
+    margin-top: 46px;
+
+    @include mq(lg) {
+        margin-top: 60px;
+
+        display: flex;
+        gap: 80px;
+    }
+}
+
+.products__block {
+
+    @include mq(lg) {
+        max-width: 260px;
+    }
+}
+
+// 2つ目以降の「products__block」に当てる
+.products__block:not(:first-child) {
+    margin-top: 40px;
+
+    @include mq(lg) {
+        margin-top: 0;
+    }
+}
+
+.products__block-items {
+}
+
+.products__block-img {
+
+    img {
+
+    }
+}
+
+.products__block-text {
+    margin-top: 20px;
+
+    font-size: 14px;
+    line-height: 170%; /* 23.8px */
+
+    @include mq(lg) {
+        margin-top: 18px;
+        
+        line-height: 170%; /* 23.8px */
+    }
+}
+
+.products__block-price {
+    margin-top: 10px;
+
+    color: #989898;
+    font-size: 14px;
+    line-height: 170%; /* 23.8px */
+}
+
+.products__button {
+    margin-top: 40px;
+    text-align: center;
+
+    @include mq(lg) {
+        margin-top: 44px;
+    }
+}
+// ----- /products -----
+
+// ----- news -----
+.news {
+    margin-top: 98px;
+
+    @include mq(lg) {
+        margin-top: 160px;
+    }
+}
+
+.news__inner {
+}
+
+.news__heading {
+}
+
+.news__heading-title {
+}
+
+.news__blocks {
+    margin-top: 46px;
+    margin-bottom: 28px;
+
+    @include mq(lg) {
+        margin-top: 61px;
+    }
+}
+
+.news__block {
+    padding-bottom: 28px;
+    border-bottom: 1px solid #E0E0E0;
+
+    @include mq(lg) {
+        padding-bottom: 24px;
+    }
+}
+
+// 2つ目以降の「news__block」に当てる
+.news__block:not(:first-child) {
+    padding-top: 26px;
+    padding-bottom: 32px;
+
+    @include mq(lg) {
+        padding-top: 23px;
+        padding-bottom: 24px;
+    }
+}
+
+.news__block-items {
+
+    @include mq(lg) {
+        display: flex;
+        gap: 40px;
+    }
+}
+
+.news__block-item-img {
+}
+
+.news__block-img {
+
+    @include mq(lg) {
+        // 260 / 1040
+        width: calc(260px / 1040px);
+        max-width: 260px;
+    }
+
+    img {
+
+    }
+}
+
+// テキストのまとめ
+.news__block-item-texts {
+
+    @include mq(lg) {
+        // 736 / 1040
+        width: calc(736px / 1040px);
+        max-height: 129px;
+        margin-right: 4px;
+        margin-bottom: 31px;
+    }
+}
+
+// テキスト年月日
+.news__block-yyyymmdd {
+    margin-top: 14px;
+
+    font-size: 14px;
+
+    @include mq(lg) {
+        margin-top: 0;
+    }
+}
+
+// テキストタイトル
+.news__block-title {
+    margin-top: 8px;
+    padding-right: 1px;
+
+    font-weight: 600;
+
+    @include mq(lg) {
+        margin-top: 12px;
+
+        font-size: 18px;
+        line-height: 170%; /* 32.4px */
+    }
+}
+
+// テキスト詳細
+.news__block-text {
+    margin-top: 15px;
+    padding-right: 4px;
+    
+    color: #888;
+    font-size: 14px;
+    line-height: 165%;
+
+    @include mq(lg) {
+        margin-top: 10px;
+    }
+}
+
+.news__button {
+    margin-top: 40px;
+
+    text-align: center;
+}
+// ----- /news -----
+
+// ----- motto -----
+.motto {
+    margin-top: 94px;
+    margin-bottom: 96px;
+
+    @include mq(lg) {
+        margin-top: 158px;
+    }
+}
+
+.motto__inner {
+}
+
+.motto__container {
+    @include mq(lg) {
+        display: flex;
+        flex-direction: row-reverse;
+
+        max-width: 1200px;
+        height: 400px;
+    }
+}
+
+.motto__img-box {
+    @include mq(lg) {
+        flex: 0 0 50%; /* 画像の幅を50%に設定 */
+    }
+}
+
+.motto__img {
+}
+
+.motto__text-box {
+    @include mq(lg) {
+        margin: auto 0;
+        padding-right: calc(80px / 1200px * 100%); /* 80pxの余白を%に換算 */
+
+        flex: 0 0 50%; /* 画像の幅を50%に設定 */
+    }
+}
+
+.motto__title {
+    margin-top: 30px;
+
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 165%; /* 33px */
+
+    @include mq(lg) {
+        margin-top: 0;
+        padding-top: 2px;
+
+        font-size: 28px;
+        line-height: 176%; /* 49.28px */
+    }
+}
+
+.motto__text {
+    margin-top: 22px;
+    padding-right: 4px;
+
+    font-size: 14px;
+    line-height: 175%; /* 33px */
+
+    @include mq(lg) {
+        margin-top: 38px;
+
+        font-size: 16px;
+    }
+}
+// ----- /motto -----
+
+// ----- contact -----
+.contact {
+    padding-top: 56px;
+    padding-bottom: 56px;
+    background: url(../img/contact_bg.png) no-repeat center center / cover;
+
+    @include mq(lg) {
+        margin-top: 160px;
+        padding-top: 56px;
+        padding-bottom: 80px;
+        background-image: url(../img/contact_bg-pc.png);
+    }
+}
+
+.contact__inner {
+}
+
+.contact__heading {
+}
+
+.contact__heading-title {
+    color: $main-color;
+}
+
+.contact__message {
+    margin-top: 46px;
+    // Contactの幅
+    // (104 / 345) * 100
+    // margin-left: calc(104px / 345px * 100%);
+
+    // *と文字を横並びにする
+    display: flex;
+    align-items: center; /* 縦方向の中央揃え */
+    justify-content: center;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    @include mq(lg) {
+        margin-top: 60px;
+        max-width: 510px;
+    }
+}
+
+// 必須のアスタリスク
+.form-field__tag {
+    display: inline-block;
+    color: $required-color;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 4px;
+
+    &.ml-none {
+        margin-left: 0;
+    }
+}
+
+.contact__message-text {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.contact__form {
+    @include mq(lg) {
+        max-width: 510px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.contact__fields {
+}
+
+// 1つ目の「名前」の上の余白
+.contact__field {
+}
+
+// 2つ目以降の「contact__field」に当てる
+.contact__field:not(:first-child) {
+    margin-top: 31px;
+}
+
+.form-field {
+    margin-top: 24px;
+
+    @include mq(lg) {
+        margin-top: 19px;
+        display: flex;
+
+        position: relative;
+    }
+}
+
+.form-field__head {
+    // *と文字を横並びにする
+    display: flex;
+    align-items: center; /* 縦方向の中央揃え */
+    justify-content: center;
+
+    display: inline-flex; /* 要素を横並びにし、親要素の幅に影響されないようにする */
+    padding: 3px 14px;
+
+    background-color: $main-color;
+
+    @include mq(lg) {
+        min-width: 175px;
+        height: 40px;
+        padding: 0;
+        margin-right: 10px;
+    }
+
+    // 項目名の三角形
+    &::before {
+        display: none;
+    
+        @include mq(lg) {
+            display: block;
+            position: absolute;
+            content: "";
+            top: 0;
+            left: calc(175px / 510px * 100%);
+            width: 0;
+            height: 0;
+    
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 5px solid $main-color;
+        }
+    }
+}
+
+.form-field__label {
+    color: $text-color-white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 150%; /* 23.8px */
+
+    white-space: nowrap; /* テキストを改行させない */
+
+    @include mq(lg) {
+        font-size: 18px;
+        line-height: 170%; /* 30.6px */
+    }
+}
+
+.form-field__item {
+    margin-top: 3px;
+    box-shadow: 5px 6px 16px 0px rgba(96, 96, 96, 0.16);
+
+    &.shadow-none {
+        box-shadow: none;
+    }
+
+    @include mq(lg) {
+        margin-top: 0;
+        margin-left: 5px;
+        // 320px / 510px
+        width: calc(320px / 510px * 100%);
+    }
+}
+
+// テキストボックス
+.form-text {
+    border: none; /* 枠線を消す */
+    outline: none; /* フォーカス時のアウトラインも消す */
+    width: 100%;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+// ラジオボタン
+.form-field__radios {
+}
+
+// テキストエリア
+.form-textarea {
+    border: none; /* 枠線を消す */
+    outline: none; /* フォーカス時のアウトラインも消す */
+
+    width: 100%;
+    height: 122px;
+}
+
+.contact__privacy {
+    margin-top: 28px;
+    // 53 / 345
+    margin-left: calc(53px / 345px * 100%);
+
+    @include mq(lg) {
+        margin-top: 32px;
+        // 135 / 510
+        margin-left: calc(135px / 510px * 100%);
+    }
+}
+
+.form-checkbox {
+}
+
+.form-checkbox__input {
+    // 最小にした上で、表示領域をなくす
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+
+    // チェックされた時の動き
+    &:checked {
+        + .form-checkbox__text {
+            &:after {
+                opacity: 1;
+            }
+        }
+    }
+
+    &:focus {
+        + .form-checkbox__text {
+            &::before {
+                border-color: $main-color;
+            }
+        }
+    }
+}
+
+.form-checkbox__text {
+    // 疑似要素でチェックボックスを再現させる
+    position: relative;
+
+    // beforeは四角、afterはチェック
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        left: -30px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    &::before {
+        width: 22px;
+        height: 22px;
+        border: 1px solid $main-color;
+        background-color: $text-color-white;
+
+        transition: border-color 0.3s;
+    }
+
+    &::after {
+        width: 23px;
+        height: 17.53px;
+        left: -30px;
+        margin-top: -1.2px;
+        // containは縦横比を維持
+        background: url(../img/check-icon.png) no-repeat center center / contain;
+        // デフォルトは非表示
+        opacity: 0;
+    }
+}
+
+.form-checkbox__text-link {
+    color: $main-color;
+    text-align: center;
+    -webkit-text-decoration-line: underline;
+            text-decoration-line: underline;
+}
+
+.contact__button {
+    margin-top: 23px;
+
+    text-align: center;
+
+    @include mq(lg) {
+        margin-top: 44px;
+    }
+}
+
+.form-radio__input{
+    display: none; /* ラジオボタンを非表示にする */
+}
+.form-radio__text{
+    padding: 6px 23px 4px; /* 上に6px、左右に23px、下に4pxのpadding */
+    background-color: $text-color-white; /* 初期の背景色 */
+    color: $main-color; /* 初期の文字色 */
+    cursor: pointer;
+    display: inline-block;
+    margin-right: -4px; /* 隣り合う要素をくっつけるためのマージン調整 */
+    border: 1px solid $text-color-white; /* ボーダーを追加 */
+    transition: background-color 0.3s, color 0.3s; /* 色の変化をスムーズにする */
+}
+
+.form-radio__input:checked + .form-radio__text {
+    background-color: #3EA1D1; /* 選択された背景色 */
+    color: #FFF; /* 選択された文字色 */
+}
+
+/* 追加スタイル：隣り合うボタンの間にボーダーが重複しないように */
+.form-radio:first-of-type .form-radio__text {
+    border-right: none;
+}
+
+// ----- /contact -----
+
+// ----- footer -----
+.footer {
+    padding-top: 34px;
+}
+
+.footer__content{
+}
+
+.footer__image-box {
+    text-align: center;
+}
+
+.footer__img {
+    width: 120px;
+}
+
+.footer__text-box {
+    margin-top: 10px;
+    text-align: center;
+
+    @include mq(lg) {
+        margin-top: 18px;
+
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+    }
+}
+
+.footer__text {
+    color: $text-color;
+    font-size: 12px;
+}
+
+.footer__text:not(:first-child) {
+    margin-top: 4px;
+
+    @include mq(lg) {
+        margin-top: 0;
+    }
+}
+
+.footer__sns-links {
+}
+
+.footer__sns-link {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 16px;
+
+    @include mq(lg) {
+        margin-top: 16px;
+    }
+}
+
+.footer__sns {
+}
+
+.footer__copyrigh-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+
+    @include mq(lg) {
+        margin-top: 18px;
+        margin-bottom: 14px;
+    }
+}
+
+.footer__copyright {
+    color: #888;
+    font-size: 12px;
+}
+
+// ----- /footer -----
